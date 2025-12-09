@@ -1,5 +1,7 @@
 {
   "name": "Copy of ALA 8 - Creative Bureau",
   "description": "Um Bureau Criativo Full Stack baseado em Curitiba. Especializado em Tráfego, Design e Edição de Vídeo com uma estética Brutalista Leve e engenharia criativa impulsionada por IA.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "geolocation"
+  ]
 }

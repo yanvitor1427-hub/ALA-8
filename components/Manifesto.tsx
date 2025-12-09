@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Play } from 'lucide-react';
 
 export const Manifesto: React.FC = () => {
   return (
@@ -25,7 +26,22 @@ export const Manifesto: React.FC = () => {
           </div>
 
           {/* Terminal Content */}
-          <div className="p-6 md:p-12 text-base md:text-xl leading-relaxed text-gray-300 font-mono">
+          <div className="p-6 md:p-12 text-base md:text-xl leading-relaxed text-gray-300 font-mono relative">
+            
+            {/* Action Button */}
+            <div className="flex justify-end mb-8">
+                <motion.button
+                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group relative px-6 py-2 bg-transparent border border-[#27c93f] text-[#27c93f] rounded font-mono text-xs md:text-sm font-bold tracking-widest uppercase overflow-hidden transition-all duration-300 w-full md:w-auto flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(39,201,63,0.3)]"
+                >
+                    <span className="absolute inset-0 w-full h-full bg-[#27c93f] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                    <Play size={12} className="relative z-10 fill-current group-hover:text-black transition-colors duration-300" />
+                    <span className="relative z-10 group-hover:text-black transition-colors duration-300">INICIAR PROJETO</span>
+                </motion.button>
+            </div>
+
             <div className="mb-6">
               <span className="text-[#27c93f] mr-2">root@ala8:~/manifesto#</span>
               <span className="text-white">cat visao.txt</span>
