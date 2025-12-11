@@ -64,42 +64,42 @@ const App: React.FC = () => {
         <Testimonials />
       </div>
 
-      <div id={SectionId.CONTACT} className="min-h-screen flex flex-col relative bg-white">
+      <div id={SectionId.CONTACT} className="min-h-screen flex flex-col relative bg-black">
         <div className="flex flex-col w-full pt-20 md:pt-32 pb-16">
           
           {/* Centered Text Content */}
-          <div className="w-full flex flex-col justify-center items-center px-6 md:px-12 z-10 text-center mb-8">
-             <h2 className="text-[12vw] md:text-[9rem] font-black leading-[0.85] tracking-tighter uppercase mb-6 md:mb-8">
+          <div className="w-full flex flex-col justify-center items-center px-6 md:px-12 z-10 text-center mb-0 md:mb-0">
+             <h2 className="text-[15vw] md:text-[13rem] font-anton leading-[0.85] tracking-wide uppercase mb-6 text-white relative z-20">
                ALCANCE<br />GLOBAL.
              </h2>
-             <p className="font-mono text-gray-500 max-w-lg text-sm md:text-base leading-relaxed">
+             <p className="font-mono text-gray-400 max-w-lg text-base md:text-xl leading-relaxed relative z-20">
                Operando de Curitiba. Servindo o mundo.<br />
                Sinais digitais ignoram fronteiras.
              </p>
           </div>
           
           {/* 3D Globe */}
-          <div className="w-full h-[400px] md:h-[600px] relative -mt-8 md:-mt-12 z-0 mb-16">
+          <div className="w-full h-[500px] md:h-[850px] relative -mt-24 md:-mt-40 z-0 mb-16 pointer-events-none md:pointer-events-auto">
             <ThreeGlobe />
           </div>
 
           {/* Contact Info Grid - Below Globe */}
-          <div className="w-full max-w-5xl mx-auto px-6">
+          <div className="w-full max-w-5xl mx-auto px-6 relative z-10">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 font-mono text-center">
                 <div className="flex flex-col items-center gap-3">
-                  <MapPin className="text-black mb-1" size={28} strokeWidth={1.5} />
-                  <span className="text-gray-400 font-bold uppercase tracking-wider text-xs">Base</span>
-                  <span className="font-bold text-base md:text-lg uppercase tracking-tight">CURITIBA, BRASIL</span>
+                  <MapPin className="text-white mb-1" size={28} strokeWidth={1.5} />
+                  <span className="text-gray-500 font-bold uppercase tracking-wider text-xs">Base</span>
+                  <span className="text-white font-bold text-base md:text-lg uppercase tracking-tight">CURITIBA, BRASIL</span>
                 </div>
                 <div className="flex flex-col items-center gap-3">
-                   <Mail className="text-black mb-1" size={28} strokeWidth={1.5} />
-                   <span className="text-gray-400 font-bold uppercase tracking-wider text-xs">Email</span>
-                   <a href="mailto:contact@ala8.com" className="font-bold text-base md:text-lg uppercase tracking-tight hover:text-gray-600 transition-colors">CONTACT@ALA8.COM</a>
+                   <Mail className="text-white mb-1" size={28} strokeWidth={1.5} />
+                   <span className="text-gray-500 font-bold uppercase tracking-wider text-xs">Email</span>
+                   <a href="mailto:contact@ala8.com" className="text-white font-bold text-base md:text-lg uppercase tracking-tight hover:text-gray-300 transition-colors">CONTACT@ALA8.COM</a>
                 </div>
                 <div className="flex flex-col items-center gap-3">
-                   <Instagram className="text-black mb-1" size={28} strokeWidth={1.5} />
-                   <span className="text-gray-400 font-bold uppercase tracking-wider text-xs">Social</span>
-                   <a href="#" className="font-bold text-base md:text-lg uppercase tracking-tight hover:text-gray-600 transition-colors">@ALA8.BUREAU</a>
+                   <Instagram className="text-white mb-1" size={28} strokeWidth={1.5} />
+                   <span className="text-gray-500 font-bold uppercase tracking-wider text-xs">Social</span>
+                   <a href="#" className="text-white font-bold text-base md:text-lg uppercase tracking-tight hover:text-gray-300 transition-colors">@ALA8.BUREAU</a>
                 </div>
              </div>
           </div>
@@ -107,7 +107,7 @@ const App: React.FC = () => {
 
         <a 
           href="mailto:contact@ala8.com" 
-          className="w-full bg-black text-white hover:bg-technical transition-colors duration-500 py-16 md:py-24 flex items-center justify-center cursor-pointer group overflow-hidden relative"
+          className="w-full bg-white text-black hover:bg-gray-200 transition-colors duration-500 py-16 md:py-24 flex items-center justify-center cursor-pointer group overflow-hidden relative"
         >
            <span className="text-5xl md:text-[8vw] leading-none font-black uppercase tracking-tighter group-hover:scale-105 transition-transform duration-500 z-10 text-center">
              INICIAR PROJETO

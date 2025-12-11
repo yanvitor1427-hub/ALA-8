@@ -1,8 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Box, TorusKnot, Cone, Torus, Sphere, Float, MeshDistortMaterial } from '@react-three/drei';
+import { Box, TorusKnot, Cone, Torus, Sphere, Float, MeshDistortMaterial, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
+
+// --- PALETA MONOCROMÁTICA (GREYSCALE) ---
+const C_ACCENT = "#808080"; // Grey for accents
+const C_DARK = "#1a1a1a";   // Dark Grey/Black for main elements
+const C_LIGHT = "#e5e5e5";  // Light Grey
 
 // --- 3D ICONS ---
 
@@ -11,30 +16,35 @@ const TrafficIcon = () => {
   
   useFrame((state) => {
     if (groupRef.current) {
-      // Gentle floating rotation
       groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
     }
   });
 
   return (
     <group ref={groupRef} position={[0, -0.5, 0]}>
-      {/* Bar 1 */}
+      {/* Bar 1 - Small */}
       <Float speed={2} rotationIntensity={0} floatIntensity={0.2}>
-         <Box args={[0.4, 1.2, 0.4]} position={[-0.6, 0.6, 0]}>
-            <meshStandardMaterial color="#d4d4d4" roughness={0.2} metalness={0.5} />
-         </Box>
+         <group position={[-0.8, -0.6, 0]}>
+             <RoundedBox args={[0.5, 1.2, 0.5]} radius={0.05} smoothness={4}>
+                <meshStandardMaterial color={C_ACCENT} transparent opacity={0.4} roughness={0.2} metalness={0.5} />
+             </RoundedBox>
+         </group>
       </Float>
-      {/* Bar 2 (Taller) */}
+      {/* Bar 2 - Medium */}
       <Float speed={3} rotationIntensity={0} floatIntensity={0.2} floatingRange={[0.1, 0.3]}>
-         <Box args={[0.4, 2.0, 0.4]} position={[0, 1.0, 0.2]}>
-            <meshStandardMaterial color="#a3a3a3" roughness={0.2} metalness={0.5} />
-         </Box>
+         <group position={[0, -0.2, 0.2]}>
+             <RoundedBox args={[0.5, 2.0, 0.5]} radius={0.05} smoothness={4}>
+                <meshStandardMaterial color={C_ACCENT} transparent opacity={0.7} roughness={0.2} metalness={0.5} />
+             </RoundedBox>
+         </group>
       </Float>
-      {/* Bar 3 (Tallest) */}
+      {/* Bar 3 - Tall (Hero) */}
       <Float speed={2.5} rotationIntensity={0} floatIntensity={0.2} floatingRange={[-0.1, 0.1]}>
-         <Box args={[0.4, 2.8, 0.4]} position={[0.6, 1.4, 0]}>
-            <meshStandardMaterial color="#737373" roughness={0.2} metalness={0.5} />
-         </Box>
+         <group position={[0.8, 0.4, 0]}>
+             <RoundedBox args={[0.5, 3.2, 0.5]} radius={0.05} smoothness={4}>
+                <meshStandardMaterial color={C_DARK} roughness={0.1} metalness={0.6} />
+             </RoundedBox>
+         </group>
       </Float>
     </group>
   );
@@ -51,14 +61,14 @@ const DesignIcon = () => {
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-      <TorusKnot args={[0.8, 0.3, 128, 16]} ref={meshRef}>
+    <Float speed={2} rotationIntensity={0.4} floatIntensity={0.5}>
+      <TorusKnot args={[0.9, 0.35, 128, 32]} ref={meshRef}>
         <MeshDistortMaterial 
-          color="#525252" 
-          speed={2} 
-          distort={0.4} 
+          color={C_DARK} 
+          speed={3} 
+          distort={0.3} 
           roughness={0.2} 
-          metalness={0.8} 
+          metalness={0.8}
         />
       </TorusKnot>
     </Float>
@@ -71,59 +81,73 @@ const VideoIcon = () => {
   useFrame((state) => {
     if (groupRef.current) {
        groupRef.current.rotation.y += 0.01;
+       groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
   });
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} position={[0, 0, 0]}>
       <Float speed={4} rotationIntensity={0.5} floatIntensity={1}>
         {/* Ring */}
-        <Torus args={[1, 0.1, 16, 32]} rotation={[Math.PI / 2, 0, 0]}>
-          <meshStandardMaterial color="#737373" roughness={0.2} metalness={0.8} />
+        <Torus args={[1.2, 0.15, 16, 32]} rotation={[Math.PI / 2, 0, 0]}>
+          <meshStandardMaterial color={C_ACCENT} transparent opacity={0.5} roughness={0.2} metalness={0.8} />
         </Torus>
         {/* Play Triangle */}
-        <Cone args={[0.6, 1.2, 3]} rotation={[0, 0, -Math.PI / 2]} position={[0.2, 0, 0]}>
-          <meshStandardMaterial color="#171717" roughness={0.2} metalness={0.5} />
+        <Cone args={[0.8, 1.6, 3]} rotation={[0, 0, -Math.PI / 2]} position={[0.2, 0, 0]}>
+          <meshStandardMaterial color={C_DARK} roughness={0.1} metalness={0.5} />
         </Cone>
       </Float>
     </group>
   );
 };
 
+// IMPLEMENTATION OF THE REFERENCE IMAGE: Black Sphere, Grey Planes, Vertical Rods
 const FullStackIcon = () => {
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = -state.clock.elapsedTime * 0.2;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
     }
   });
 
   return (
     <group ref={groupRef}>
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
-        {/* Central Core */}
-        <Sphere args={[0.5, 32, 32]}>
-           <meshStandardMaterial color="#171717" roughness={0.1} metalness={1} />
+      <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.1}>
+        {/* Central Core - Large Black Sphere */}
+        <Sphere args={[0.85, 64, 64]}>
+           <meshStandardMaterial color="#000000" roughness={0.1} metalness={0.2} />
         </Sphere>
         
-        {/* Orbital Layers */}
-        <Box args={[2.2, 0.05, 2.2]} position={[0, -0.8, 0]}>
-           <meshStandardMaterial color="#333" transparent opacity={0.5} />
-        </Box>
-        <Box args={[1.8, 0.05, 1.8]} position={[0, 0, 0]}>
-           <meshStandardMaterial color="#666" transparent opacity={0.3} />
-        </Box>
-        <Box args={[2.2, 0.05, 2.2]} position={[0, 0.8, 0]}>
-           <meshStandardMaterial color="#333" transparent opacity={0.5} />
+        {/* Planes - Grey */}
+        {/* Top Plane */}
+        <Box args={[2.5, 0.05, 2.5]} position={[0, 1.2, 0]}>
+           <meshStandardMaterial color="#808080" transparent opacity={0.7} roughness={0.2} />
         </Box>
         
-        {/* Connecting Lines */}
-        <Box args={[0.05, 2, 0.05]} position={[1, 0, 1]}>
-          <meshStandardMaterial color="#525252" />
+        {/* Middle Intersecting Plane */}
+        <Box args={[3.0, 0.02, 3.0]} position={[0, 0, 0]}>
+           <meshStandardMaterial color="#A0A0A0" transparent opacity={0.4} roughness={0.2} />
         </Box>
-        <Box args={[0.05, 2, 0.05]} position={[-1, 0, -1]}>
-          <meshStandardMaterial color="#a3a3a3" />
+        
+        {/* Bottom Plane */}
+        <Box args={[2.5, 0.05, 2.5]} position={[0, -1.2, 0]}>
+           <meshStandardMaterial color="#808080" transparent opacity={0.7} roughness={0.2} />
+        </Box>
+        
+        {/* Vertical Poles - Black/Dark Grey - Framing the structure */}
+        {/* Positioned at corners of the planes approx */}
+        <Box args={[0.08, 3.2, 0.08]} position={[1.1, 0, 1.1]}>
+          <meshStandardMaterial color="#1a1a1a" />
+        </Box>
+        <Box args={[0.08, 3.2, 0.08]} position={[-1.1, 0, -1.1]}>
+          <meshStandardMaterial color="#1a1a1a" />
+        </Box>
+        <Box args={[0.08, 3.2, 0.08]} position={[1.1, 0, -1.1]}>
+          <meshStandardMaterial color="#1a1a1a" />
+        </Box>
+        <Box args={[0.08, 3.2, 0.08]} position={[-1.1, 0, 1.1]}>
+          <meshStandardMaterial color="#1a1a1a" />
         </Box>
       </Float>
     </group>
@@ -161,23 +185,38 @@ const services = [
 
 export const Capabilities: React.FC = () => {
   const [activeServiceIndex, setActiveServiceIndex] = useState(0);
+  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 6]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        if (window.innerWidth < 768) {
+          setCameraPosition([0, 0, 7.5]);
+        } else {
+          setCameraPosition([0, 0, 6]);
+        }
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row bg-white relative">
-      {/* LEFT PANEL (STICKY) */}
-      <div className="w-full md:w-1/2 h-[50vh] md:h-screen sticky top-0 bg-gray-50 flex items-center justify-center overflow-hidden border-r border-gray-100">
-        <div className="absolute top-8 left-8 z-10 font-mono text-xs select-none pointer-events-none">
-          VISUALIZADOR_DE_REDE.exe
+      {/* LEFT PANEL */}
+      <div className="w-full md:w-1/2 h-[45vh] md:h-screen sticky top-0 z-20 bg-white flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-gray-200 shadow-xl md:shadow-none">
+        <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 font-mono text-[10px] md:text-xs select-none pointer-events-none text-gray-400">
+          VISUALIZADOR_DE_REDE.exe <span className="text-gray-900 animate-pulse">● ONLINE</span>
         </div>
         
         <div className="w-full h-full">
-           <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-             <ambientLight intensity={1} />
-             <pointLight position={[10, 10, 10]} intensity={2} />
-             <pointLight position={[-10, -10, -5]} intensity={1} color="#e5e5e5" />
+           <Canvas camera={{ position: cameraPosition, fov: 40 }}>
+             <ambientLight intensity={1.5} />
+             <pointLight position={[10, 10, 10]} intensity={1.0} color="#ffffff" />
+             <pointLight position={[-10, 0, -10]} intensity={0.5} color="#ffffff" />
              
-             {/* Render Active Icon */}
-             <group>
+             <group position={[0, 0, 0]}>
                {activeServiceIndex === 0 && <TrafficIcon />}
                {activeServiceIndex === 1 && <DesignIcon />}
                {activeServiceIndex === 2 && <VideoIcon />}
@@ -187,21 +226,28 @@ export const Capabilities: React.FC = () => {
         </div>
       </div>
 
-      {/* RIGHT PANEL (SCROLL) */}
-      <div className="w-full md:w-1/2 min-h-screen p-8 md:p-24 flex flex-col justify-center gap-32 bg-white">
+      {/* RIGHT PANEL */}
+      <div className="w-full md:w-1/2 min-h-screen p-6 md:p-16 flex flex-col justify-center gap-16 md:gap-20 bg-white pb-24">
         {services.map((s, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ margin: "-20% 0px -20% 0px" }}
+            viewport={{ margin: "-30% 0px -30% 0px" }}
             onViewportEnter={() => setActiveServiceIndex(i)}
-            transition={{ duration: 0.8 }}
-            className="flex flex-col gap-4 border-l-4 border-black pl-8"
+            transition={{ duration: 0.6 }}
+            className="flex flex-col gap-2 border-l-4 border-black pl-6 md:pl-8"
           >
-            <span className="font-mono text-xs bg-black text-white w-fit px-2 py-1">{s.tag}</span>
-            <h3 className="text-6xl md:text-7xl font-sans font-bold leading-none uppercase">{s.title}</h3>
-            <p className="font-mono text-gray-500 max-w-md">{s.desc}</p>
+            <span 
+              className="font-mono text-[10px] font-bold w-fit px-2 py-1 text-black"
+              style={{ backgroundColor: '#f3f4f6' }} // Light grey bg
+            >
+              <span className="text-gray-600">
+                 {s.tag}
+              </span>
+            </span>
+            <h3 className="text-3xl md:text-5xl font-sans font-bold leading-none uppercase text-black">{s.title}</h3>
+            <p className="font-mono text-gray-500 max-w-sm text-xs md:text-sm leading-relaxed">{s.desc}</p>
           </motion.div>
         ))}
       </div>

@@ -67,7 +67,7 @@ const ProjectCard: React.FC<{ project: EnhancedProject }> = ({ project }) => {
         <span className="text-[11px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 font-mono">
           {project.service} • {project.year}
         </span>
-        <h3 className="text-3xl md:text-4xl font-mono font-bold text-gray-900 leading-tight mb-3 tracking-tighter uppercase">
+        <h3 className="text-3xl md:text-4xl font-anton text-gray-900 leading-tight mb-3 tracking-wide uppercase">
           {project.name}
         </h3>
         <p className="text-gray-500 text-sm md:text-base font-mono font-medium leading-relaxed max-w-[90%]">
@@ -104,7 +104,7 @@ export const ProjectLogs: React.FC = () => {
       {/* Header Styled cleanly */}
       <div className="max-w-[1920px] mx-auto w-full px-6 md:px-16 mb-16 flex flex-col md:flex-row justify-between items-end">
         <div>
-          <h2 className="text-4xl md:text-6xl font-mono font-bold text-gray-900 tracking-tighter uppercase">
+          <h2 className="text-5xl md:text-7xl font-anton text-gray-900 tracking-wide uppercase">
             Projetos Selecionados.
           </h2>
           <p className="text-xl md:text-2xl text-gray-500 mt-4 max-w-2xl font-mono tracking-tight">

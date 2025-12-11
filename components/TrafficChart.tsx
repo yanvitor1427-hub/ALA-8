@@ -1,112 +1,148 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, ArrowUp, ArrowDown } from 'lucide-react';
+import { TrendingUp, DollarSign, BarChart3, ArrowUp, Monitor } from 'lucide-react';
 
 export const TrafficChart: React.FC = () => {
+  const NEON_GREEN = "#39FF14";
+
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      className="bg-black text-white p-6 rounded-xl font-mono w-full max-w-lg shadow-2xl border border-gray-800 mt-8 relative overflow-hidden"
+      className="bg-white text-black p-6 rounded-xl font-mono w-full max-w-lg shadow-2xl border border-gray-100 mt-8 relative overflow-hidden"
     >
+      {/* Background Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-10 pointer-events-none" 
+        style={{ 
+            backgroundImage: `linear-gradient(${NEON_GREEN} 1px, transparent 1px), linear-gradient(90deg, ${NEON_GREEN} 1px, transparent 1px)`, 
+            backgroundSize: '20px 20px' 
+        }}
+      />
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-8 relative z-10">
-        <h3 className="text-xl font-bold tracking-tight text-white">Relatório de Tráfego</h3>
-        <div className="bg-gray-900 px-3 py-1 rounded text-xs text-gray-400 border border-gray-800">
-          Últimos 7 Dias
+      <div className="flex justify-between items-center mb-12 relative z-10">
+        <div className="flex items-center gap-2">
+            <BarChart3 style={{ color: NEON_GREEN }} size={20} />
+            <h3 className="text-xl font-bold tracking-tight text-black">Profit Scale</h3>
+        </div>
+        <div 
+          className="px-3 py-1 rounded text-xs font-bold uppercase border flex items-center gap-2"
+          style={{ 
+            backgroundColor: `rgba(57, 255, 20, 0.05)`, 
+            color: '#16a34a', 
+            borderColor: NEON_GREEN 
+          }}
+        >
+          <TrendingUp size={12} />
+          Alta Performance
         </div>
       </div>
 
-      {/* Funnel Visualization */}
-      <div className="relative h-56 mb-8 w-full">
-        {/* Grid Lines */}
-        <div className="absolute inset-0 flex justify-between px-8 z-0 opacity-20 pointer-events-none">
-          <div className="w-[1px] h-full bg-gray-600 dashed" />
-          <div className="w-[1px] h-full bg-gray-600" />
-          <div className="w-[1px] h-full bg-gray-600" />
-          <div className="w-[1px] h-full bg-gray-600" />
+      {/* Main Illustration Area - 3D Composition */}
+      <div className="relative h-64 w-full flex items-center justify-center z-10 pb-8">
+        
+        {/* Monitor Frame (Backplate) */}
+        <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="absolute w-64 h-48 bg-gray-50 border-4 border-gray-100 rounded-2xl flex flex-col items-center justify-center shadow-inner overflow-hidden"
+        >
+             {/* Screen Content Placeholder */}
+             <div className="w-full h-8 bg-gray-100 border-b border-gray-200 mb-auto flex items-center px-4 gap-2">
+                 <div className="w-2 h-2 rounded-full bg-gray-300" />
+                 <div className="w-2 h-2 rounded-full bg-gray-300" />
+             </div>
+             <div className="w-full flex-1 bg-white opacity-50 relative">
+                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-gray-50" />
+             </div>
+        </motion.div>
+
+        {/* 3D Bars */}
+        <div className="relative z-20 flex items-end gap-3 translate-y-4">
+            {/* Bar 1 */}
+            <motion.div
+                initial={{ height: 0 }}
+                whileInView={{ height: 80 }}
+                transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
+                className="w-14 rounded-t-lg shadow-lg border border-green-400 relative overflow-hidden group"
+                style={{ backgroundColor: NEON_GREEN }}
+            >
+                <div className="absolute inset-0 bg-white opacity-20 transform -skew-x-12 translate-x-4" />
+            </motion.div>
+             {/* Bar 2 */}
+            <motion.div
+                initial={{ height: 0 }}
+                whileInView={{ height: 120 }}
+                transition={{ duration: 0.6, delay: 0.3, type: "spring" }}
+                className="w-14 rounded-t-lg shadow-lg border border-green-400 relative overflow-hidden"
+                style={{ backgroundColor: NEON_GREEN }}
+            >
+                 <div className="absolute inset-0 bg-white opacity-20 transform -skew-x-12 translate-x-4" />
+            </motion.div>
+             {/* Bar 3 */}
+            <motion.div
+                initial={{ height: 0 }}
+                whileInView={{ height: 160 }}
+                transition={{ duration: 0.6, delay: 0.4, type: "spring" }}
+                className="w-14 rounded-t-lg shadow-lg border border-green-400 relative overflow-hidden"
+                style={{ backgroundColor: NEON_GREEN }}
+            >
+                 <div className="absolute inset-0 bg-white opacity-20 transform -skew-x-12 translate-x-4" />
+            </motion.div>
         </div>
 
-        {/* SVG Funnel */}
-        <svg className="absolute inset-0 w-full h-full z-10 drop-shadow-[0_0_15px_rgba(124,58,237,0.5)]" viewBox="0 0 500 220" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="funnelGradient" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.9" />
-              <stop offset="45%" stopColor="#7c3aed" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#c026d3" stopOpacity="0.3" />
-            </linearGradient>
-          </defs>
-          <motion.path
-            d="M0,20 C150,20 180,60 250,90 C320,120 380,105 500,110 L500,115 C380,120 320,105 250,135 C180,165 150,200 0,200 Z"
-            fill="url(#funnelGradient)"
-            initial={{ d: "M0,110 C150,110 180,110 250,110 C320,110 380,110 500,110 L500,115 C380,115 320,115 250,115 C180,115 150,115 0,115 Z", opacity: 0 }}
-            whileInView={{ 
-              d: "M0,20 C150,20 180,60 250,90 C320,120 380,105 500,110 L500,115 C380,120 320,105 250,135 C180,165 150,200 0,200 Z",
-              opacity: 1 
-            }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-          />
-        </svg>
+        {/* Floating Coin */}
+        <motion.div
+            initial={{ y: -100, opacity: 0, rotateY: 180 }}
+            whileInView={{ y: -80, opacity: 1, rotateY: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
+            className="absolute z-30 left-12 top-0"
+        >
+             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 border-4 border-yellow-200 shadow-2xl flex items-center justify-center relative">
+                 <div className="absolute inset-0 rounded-full border border-yellow-600 opacity-20" />
+                 <DollarSign className="text-yellow-800 w-10 h-10 drop-shadow-sm" strokeWidth={3} />
+             </div>
+        </motion.div>
 
-        {/* Data Labels */}
-        <div className="absolute inset-0 flex justify-between items-center z-20 px-2 text-xs font-sans">
-           <div className="flex flex-col items-start gap-1">
-              <span className="font-bold text-lg md:text-xl">125k</span>
-              <span className="text-gray-400 font-mono text-[10px] uppercase">Impressões</span>
-           </div>
-           <div className="flex flex-col items-start mt-16 gap-1">
-              <span className="font-bold text-lg md:text-xl">45k</span>
-              <span className="text-gray-400 font-mono text-[10px] uppercase">Cliques</span>
-           </div>
-           <div className="flex flex-col items-start mt-28 gap-1">
-              <span className="font-bold text-lg md:text-xl">2.8k</span>
-              <span className="text-gray-400 font-mono text-[10px] uppercase">Leads</span>
-           </div>
-           <div className="flex flex-col items-start mt-4 mr-2 gap-1 text-right">
-              <span className="font-bold text-lg md:text-xl text-purple-300">850</span>
-              <span className="text-gray-400 font-mono text-[10px] uppercase">Vendas</span>
-           </div>
-        </div>
+        {/* Floating Arrow */}
+        <motion.div
+            initial={{ opacity: 0, scale: 0, x: -20, y: 20 }}
+            whileInView={{ opacity: 1, scale: 1, x: 0, y: -90 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="absolute z-30 right-10 top-10"
+        >
+             <div 
+                className="p-3 rounded-full shadow-lg border-2 border-green-200 backdrop-blur-sm"
+                style={{ backgroundColor: `${NEON_GREEN}33` }} 
+             >
+                <ArrowUp className="w-8 h-8" style={{ color: '#15803d' }} strokeWidth={4} />
+             </div>
+        </motion.div>
+
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-2 gap-8 mb-8 border-t border-gray-800 pt-6">
+      {/* Footer Specs */}
+      <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-6 relative z-10">
         <div>
-           <div className="text-white text-sm font-bold mb-1">ROAS Médio</div>
-           <div className="flex items-center gap-3">
-             <span className="text-4xl font-bold tracking-tighter">12.5x</span>
-             <span className="bg-[#3e1818] text-[#ff6b6b] text-xs px-2 py-1 rounded-full flex items-center gap-1 font-bold">
-               <ArrowUp size={12} /> 12%
-             </span>
+           <div className="text-gray-400 text-[10px] font-bold mb-1 uppercase tracking-wider">Investimento</div>
+           <div className="flex items-center gap-2">
+             <span className="text-2xl font-bold text-black font-sans tracking-tight">R$ 14.5k</span>
            </div>
-           <div className="text-gray-500 text-xs mt-2 font-mono">Comparado a 11.1x semana passada</div>
         </div>
         <div>
-           <div className="text-white text-sm font-bold mb-1">Receita Gerada</div>
-           <div className="flex items-center gap-3">
-             <span className="text-4xl font-bold tracking-tighter">1.1M</span>
-             <span className="bg-[#102a20] text-[#4ade80] text-xs px-2 py-1 rounded-full flex items-center gap-1 font-bold">
-               <ArrowDown size={12} /> 4%
-             </span>
+           <div className="text-gray-400 text-[10px] font-bold mb-1 uppercase tracking-wider">Retorno</div>
+           <div className="flex items-center gap-2">
+             <span className="text-2xl font-bold text-black font-sans tracking-tight">R$ 92.3k</span>
+             <div className="bg-green-100 text-green-700 text-[10px] px-1.5 py-0.5 rounded border border-green-200 font-bold">
+               +536%
+             </div>
            </div>
-           <div className="text-gray-500 text-xs mt-2 font-mono">Comparado a 1.06M semana passada</div>
         </div>
       </div>
 
-       {/* Footer Alert */}
-       <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[#ff6b6b]">
-             <AlertTriangle size={16} />
-             <span className="font-mono text-xs uppercase tracking-wider">Custo por Aquisição (CPA)</span>
-          </div>
-          <div className="flex items-center gap-3">
-             <span className="font-bold text-xl">R$ 14,20</span>
-             <span className="bg-[#3e1818] text-[#ff6b6b] text-xs px-2 py-1 rounded-full flex items-center gap-1 font-bold">
-               <ArrowUp size={12} /> 12%
-             </span>
-          </div>
-       </div>
     </motion.div>
   );
 };
