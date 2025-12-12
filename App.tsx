@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Hero } from './components/Hero';
+import { TechStackMarquee } from './components/TechStackMarquee';
 import { Capabilities } from './components/Capabilities';
 import { Manifesto } from './components/Manifesto';
 import { ProjectLogs } from './components/ProjectLogs';
 import { Testimonials } from './components/Testimonials';
+import { FAQ } from './components/FAQ';
 import { ThreeGlobe } from './components/ThreeGlobe';
 import { Navigation } from './components/Navigation';
 import { GeminiAssistant } from './components/GeminiAssistant';
@@ -46,6 +48,8 @@ const App: React.FC = () => {
       {/* Sections */}
       <div id={SectionId.HERO}>
         <Hero />
+        {/* Tech Stack Marquee inserido como extensão visual do Hero */}
+        <TechStackMarquee />
       </div>
 
       <div id={SectionId.CAPABILITIES}>
@@ -63,6 +67,9 @@ const App: React.FC = () => {
       <div id={SectionId.TESTIMONIALS}>
         <Testimonials />
       </div>
+
+      {/* FAQ Section - Inserida antes do Contato/Footer */}
+      <FAQ />
 
       <div id={SectionId.CONTACT} className="min-h-screen flex flex-col relative bg-black">
         <div className="flex flex-col w-full pt-20 md:pt-32 pb-16">
@@ -107,7 +114,7 @@ const App: React.FC = () => {
 
         <a 
           href="mailto:contact@ala8.com" 
-          className="w-full bg-white text-black hover:bg-gray-200 transition-colors duration-500 py-16 md:py-24 flex items-center justify-center cursor-pointer group overflow-hidden relative"
+          className="w-full bg-white text-black hover:bg-gray-200 transition-colors duration-500 pt-16 md:pt-24 pb-48 flex items-center justify-center cursor-pointer group overflow-hidden relative"
         >
            <span className="text-5xl md:text-[8vw] leading-none font-black uppercase tracking-tighter group-hover:scale-105 transition-transform duration-500 z-10 text-center">
              INICIAR PROJETO

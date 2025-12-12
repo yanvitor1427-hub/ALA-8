@@ -1,157 +1,210 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Box, TorusKnot, Cone, Torus, Sphere, Float, MeshDistortMaterial, RoundedBox } from '@react-three/drei';
-import * as THREE from 'three';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
-// --- PALETA MONOCROMÁTICA (GREYSCALE) ---
-const C_ACCENT = "#808080"; // Grey for accents
-const C_DARK = "#1a1a1a";   // Dark Grey/Black for main elements
-const C_LIGHT = "#e5e5e5";  // Light Grey
+// --- VISUALIZATIONS (CSS/SVG UI ELEMENTS) ---
 
-// --- 3D ICONS ---
-
-const TrafficIcon = () => {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
-    }
-  });
-
+const TrafficDashboard = () => {
   return (
-    <group ref={groupRef} position={[0, -0.5, 0]}>
-      {/* Bar 1 - Small */}
-      <Float speed={2} rotationIntensity={0} floatIntensity={0.2}>
-         <group position={[-0.8, -0.6, 0]}>
-             <RoundedBox args={[0.5, 1.2, 0.5]} radius={0.05} smoothness={4}>
-                <meshStandardMaterial color={C_ACCENT} transparent opacity={0.4} roughness={0.2} metalness={0.5} />
-             </RoundedBox>
-         </group>
-      </Float>
-      {/* Bar 2 - Medium */}
-      <Float speed={3} rotationIntensity={0} floatIntensity={0.2} floatingRange={[0.1, 0.3]}>
-         <group position={[0, -0.2, 0.2]}>
-             <RoundedBox args={[0.5, 2.0, 0.5]} radius={0.05} smoothness={4}>
-                <meshStandardMaterial color={C_ACCENT} transparent opacity={0.7} roughness={0.2} metalness={0.5} />
-             </RoundedBox>
-         </group>
-      </Float>
-      {/* Bar 3 - Tall (Hero) */}
-      <Float speed={2.5} rotationIntensity={0} floatIntensity={0.2} floatingRange={[-0.1, 0.1]}>
-         <group position={[0.8, 0.4, 0]}>
-             <RoundedBox args={[0.5, 3.2, 0.5]} radius={0.05} smoothness={4}>
-                <meshStandardMaterial color={C_DARK} roughness={0.1} metalness={0.6} />
-             </RoundedBox>
-         </group>
-      </Float>
-    </group>
+    <div className="w-[90%] md:w-[80%] aspect-[16/10] bg-[#111] rounded-xl border border-[#333] shadow-2xl flex flex-col overflow-hidden relative group">
+      {/* Dashboard Header */}
+      <div className="h-8 border-b border-[#222] bg-[#151515] flex items-center px-4 justify-between">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#333]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#333]" />
+        </div>
+        <div className="text-[10px] font-mono text-gray-500 uppercase">Analytics_View_01</div>
+      </div>
+      
+      {/* Chart Area */}
+      <div className="flex-1 relative p-6 flex items-end">
+        {/* Grid Lines */}
+        <div className="absolute inset-0 p-6 flex flex-col justify-between opacity-10 pointer-events-none">
+          <div className="w-full h-[1px] bg-white" />
+          <div className="w-full h-[1px] bg-white" />
+          <div className="w-full h-[1px] bg-white" />
+          <div className="w-full h-[1px] bg-white" />
+          <div className="w-full h-[1px] bg-white" />
+        </div>
+
+        {/* Floating Badge */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="absolute top-1/3 right-1/4 bg-[#39FF14]/10 border border-[#39FF14]/30 backdrop-blur-md px-3 py-1.5 rounded text-[#39FF14] text-xs font-mono font-bold flex items-center gap-1 z-20 shadow-[0_0_15px_rgba(57,255,20,0.1)]"
+        >
+          ▲ +245% ROI
+        </motion.div>
+
+        {/* Line Chart (SVG) */}
+        <svg className="w-full h-full overflow-visible z-10" viewBox="0 0 100 50" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stopColor="#39FF14" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#39FF14" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <motion.path
+            d="M0,50 L0,45 C10,45 15,35 25,35 C35,35 40,40 50,30 C60,20 65,25 75,15 C85,5 90,10 100,2"
+            fill="url(#gradient)"
+            stroke="none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          />
+          <motion.path
+            d="M0,45 C10,45 15,35 25,35 C35,35 40,40 50,30 C60,20 65,25 75,15 C85,5 90,10 100,2"
+            fill="none"
+            stroke="#39FF14"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+          />
+        </svg>
+      </div>
+    </div>
   );
 };
 
-const DesignIcon = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-    }
-  });
-
+const VideoTimeline = () => {
   return (
-    <Float speed={2} rotationIntensity={0.4} floatIntensity={0.5}>
-      <TorusKnot args={[0.9, 0.35, 128, 32]} ref={meshRef}>
-        <MeshDistortMaterial 
-          color={C_DARK} 
-          speed={3} 
-          distort={0.3} 
-          roughness={0.2} 
-          metalness={0.8}
-        />
-      </TorusKnot>
-    </Float>
+    <div className="w-[90%] md:w-[80%] aspect-[16/10] bg-[#111] rounded-xl border border-[#333] shadow-2xl flex flex-col overflow-hidden relative">
+      {/* Editor Header */}
+      <div className="h-8 border-b border-[#222] bg-[#151515] flex items-center px-4 justify-between">
+        <span className="text-[10px] text-gray-400 font-mono">SEQ_FINAL_CUT_V3</span>
+        <div className="text-[#39FF14] text-[10px] font-mono">00:00:14:22</div>
+      </div>
+
+      {/* Timeline Tracks */}
+      <div className="flex-1 bg-[#0a0a0a] p-3 flex flex-col justify-center gap-3 relative">
+        {/* Playhead (Needle) */}
+        <motion.div 
+          className="absolute top-0 bottom-0 w-[1px] bg-red-500 z-30 shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+          initial={{ left: "10%" }}
+          animate={{ left: "90%" }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-2.5 h-2.5 bg-red-500 -ml-[4px] absolute top-0 transform rotate-45" />
+        </motion.div>
+
+        {/* Video Track 1 (Purple) */}
+        <div className="h-10 bg-[#1a1a1a] rounded w-full relative overflow-hidden border border-white/5">
+          <motion.div 
+            className="absolute top-1 bottom-1 left-[10%] w-[40%] bg-purple-600/80 rounded border border-purple-400/50"
+            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
+          />
+          <motion.div 
+             className="absolute top-1 bottom-1 left-[55%] w-[30%] bg-purple-600/80 rounded border border-purple-400/50"
+             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}
+          />
+        </div>
+
+        {/* Video Track 2 (Blue) */}
+        <div className="h-10 bg-[#1a1a1a] rounded w-full relative overflow-hidden border border-white/5">
+           <motion.div 
+             className="absolute top-1 bottom-1 left-[5%] w-[25%] bg-blue-500/80 rounded border border-blue-400/50"
+             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
+           />
+           <motion.div 
+             className="absolute top-1 bottom-1 left-[35%] w-[60%] bg-blue-500/80 rounded border border-blue-400/50"
+             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}
+           />
+        </div>
+
+        {/* Audio Track (Orange) */}
+        <div className="h-8 bg-[#1a1a1a] rounded w-full relative overflow-hidden border border-white/5 mt-2">
+           <div className="absolute inset-0 flex items-center justify-around opacity-20">
+               {[...Array(20)].map((_,i) => <div key={i} className="w-[2px] h-[60%] bg-white" style={{ height: `${Math.random() * 80 + 20}%`}} />)}
+           </div>
+           <motion.div 
+             className="absolute top-1 bottom-1 left-[15%] right-[10%] bg-orange-500/40 rounded border border-orange-400/30"
+             initial={{ opacity: 0, scaleX: 0 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ delay: 0.6 }}
+           />
+        </div>
+      </div>
+    </div>
   );
 };
 
-const VideoIcon = () => {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-       groupRef.current.rotation.y += 0.01;
-       groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      <Float speed={4} rotationIntensity={0.5} floatIntensity={1}>
-        {/* Ring */}
-        <Torus args={[1.2, 0.15, 16, 32]} rotation={[Math.PI / 2, 0, 0]}>
-          <meshStandardMaterial color={C_ACCENT} transparent opacity={0.5} roughness={0.2} metalness={0.8} />
-        </Torus>
-        {/* Play Triangle */}
-        <Cone args={[0.8, 1.6, 3]} rotation={[0, 0, -Math.PI / 2]} position={[0.2, 0, 0]}>
-          <meshStandardMaterial color={C_DARK} roughness={0.1} metalness={0.5} />
-        </Cone>
-      </Float>
-    </group>
-  );
+const DesignInterface = () => {
+    return (
+      <div className="w-[90%] md:w-[80%] aspect-[16/10] bg-[#e5e5e5] rounded-xl border border-gray-300 shadow-2xl flex flex-col overflow-hidden relative">
+        <div className="h-6 bg-white border-b border-gray-300 flex items-center px-3 space-x-2">
+            <div className="w-2 h-2 rounded-full bg-red-400" />
+            <div className="w-2 h-2 rounded-full bg-yellow-400" />
+            <div className="w-2 h-2 rounded-full bg-green-400" />
+        </div>
+        <div className="flex-1 p-6 relative flex items-center justify-center">
+             {/* Abstract Layout */}
+             <div className="w-full max-w-[200px] aspect-square grid grid-cols-2 gap-2 transform -rotate-6">
+                 <motion.div 
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-black rounded-lg col-span-2 h-16 shadow-lg" 
+                 />
+                 <motion.div 
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="bg-gray-400 rounded-lg h-24" 
+                 />
+                 <motion.div 
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="border-2 border-black rounded-lg h-24 relative" 
+                 >
+                    <div className="absolute -bottom-2 -right-2 bg-[#39FF14] text-black text-[10px] font-bold px-1">HEX</div>
+                 </motion.div>
+             </div>
+             
+             {/* Cursor */}
+             <motion.div
+                initial={{ x: 100, y: 100, opacity: 0 }}
+                animate={{ x: 0, y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="absolute"
+             >
+                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                     <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" fill="black" stroke="white" strokeWidth="2"/>
+                 </svg>
+             </motion.div>
+        </div>
+      </div>
+    );
 };
 
-// IMPLEMENTATION OF THE REFERENCE IMAGE: Black Sphere, Grey Planes, Vertical Rods
-const FullStackIcon = () => {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.1}>
-        {/* Central Core - Large Black Sphere */}
-        <Sphere args={[0.85, 64, 64]}>
-           <meshStandardMaterial color="#000000" roughness={0.1} metalness={0.2} />
-        </Sphere>
-        
-        {/* Planes - Grey */}
-        {/* Top Plane */}
-        <Box args={[2.5, 0.05, 2.5]} position={[0, 1.2, 0]}>
-           <meshStandardMaterial color="#808080" transparent opacity={0.7} roughness={0.2} />
-        </Box>
-        
-        {/* Middle Intersecting Plane */}
-        <Box args={[3.0, 0.02, 3.0]} position={[0, 0, 0]}>
-           <meshStandardMaterial color="#A0A0A0" transparent opacity={0.4} roughness={0.2} />
-        </Box>
-        
-        {/* Bottom Plane */}
-        <Box args={[2.5, 0.05, 2.5]} position={[0, -1.2, 0]}>
-           <meshStandardMaterial color="#808080" transparent opacity={0.7} roughness={0.2} />
-        </Box>
-        
-        {/* Vertical Poles - Black/Dark Grey - Framing the structure */}
-        {/* Positioned at corners of the planes approx */}
-        <Box args={[0.08, 3.2, 0.08]} position={[1.1, 0, 1.1]}>
-          <meshStandardMaterial color="#1a1a1a" />
-        </Box>
-        <Box args={[0.08, 3.2, 0.08]} position={[-1.1, 0, -1.1]}>
-          <meshStandardMaterial color="#1a1a1a" />
-        </Box>
-        <Box args={[0.08, 3.2, 0.08]} position={[1.1, 0, -1.1]}>
-          <meshStandardMaterial color="#1a1a1a" />
-        </Box>
-        <Box args={[0.08, 3.2, 0.08]} position={[-1.1, 0, 1.1]}>
-          <meshStandardMaterial color="#1a1a1a" />
-        </Box>
-      </Float>
-    </group>
-  );
+const SystemStack = () => {
+    return (
+        <div className="w-[90%] md:w-[80%] aspect-[16/10] bg-[#050505] rounded-xl border border-gray-800 shadow-2xl flex flex-col overflow-hidden font-mono text-xs p-4 relative">
+             <div className="text-[#39FF14] mb-2">$ init_fullstack_protocol.sh</div>
+             <div className="space-y-1 text-gray-400">
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+                    {">"} Loading Core Modules... <span className="text-white">DONE</span>
+                 </motion.div>
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+                    {">"} Connecting to Neural Network... <span className="text-white">CONNECTED</span>
+                 </motion.div>
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}>
+                    {">"} Optimizing conversion routes...
+                 </motion.div>
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }} className="text-yellow-400">
+                    WARN: High traffic volume detected.
+                 </motion.div>
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }} className="border-t border-gray-800 pt-2 mt-2">
+                    <span className="text-blue-400">root@ala8:~/</span> awaiting command<span className="animate-pulse">_</span>
+                 </motion.div>
+             </div>
+             
+             <div className="absolute right-4 bottom-4 w-12 h-12 border border-gray-800 rounded-full flex items-center justify-center animate-spin-slow">
+                <div className="w-8 h-8 border-t-2 border-[#39FF14] rounded-full" />
+             </div>
+        </div>
+    );
 };
 
 // --- DATA ---
@@ -185,71 +238,75 @@ const services = [
 
 export const Capabilities: React.FC = () => {
   const [activeServiceIndex, setActiveServiceIndex] = useState(0);
-  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 6]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window !== 'undefined') {
-        if (window.innerWidth < 768) {
-          setCameraPosition([0, 0, 7.5]);
-        } else {
-          setCameraPosition([0, 0, 6]);
-        }
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row bg-white relative">
-      {/* LEFT PANEL */}
-      <div className="w-full md:w-1/2 h-[45vh] md:h-screen sticky top-0 z-20 bg-white flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-gray-200 shadow-xl md:shadow-none">
+      {/* LEFT PANEL - VISUALIZATIONS */}
+      <div className="w-full md:w-1/2 h-[45vh] md:h-screen sticky top-0 z-20 bg-gray-50 flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-gray-200 shadow-xl md:shadow-none">
         <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 font-mono text-[10px] md:text-xs select-none pointer-events-none text-gray-400">
-          VISUALIZADOR_DE_REDE.exe <span className="text-gray-900 animate-pulse">● ONLINE</span>
+          INTERFACE_VISUAL.sys <span className="text-green-600 animate-pulse">● ONLINE</span>
         </div>
         
-        <div className="w-full h-full">
-           <Canvas camera={{ position: cameraPosition, fov: 40 }}>
-             <ambientLight intensity={1.5} />
-             <pointLight position={[10, 10, 10]} intensity={1.0} color="#ffffff" />
-             <pointLight position={[-10, 0, -10]} intensity={0.5} color="#ffffff" />
-             
-             <group position={[0, 0, 0]}>
-               {activeServiceIndex === 0 && <TrafficIcon />}
-               {activeServiceIndex === 1 && <DesignIcon />}
-               {activeServiceIndex === 2 && <VideoIcon />}
-               {activeServiceIndex === 3 && <FullStackIcon />}
-             </group>
-           </Canvas>
+        <div className="w-full h-full flex items-center justify-center p-8">
+           <AnimatePresence mode="wait">
+             <motion.div
+               key={activeServiceIndex}
+               initial={{ opacity: 0, y: 20, scale: 0.95 }}
+               animate={{ opacity: 1, y: 0, scale: 1 }}
+               exit={{ opacity: 0, y: -20, scale: 0.95 }}
+               transition={{ duration: 0.4, ease: "easeOut" }}
+               className="w-full flex items-center justify-center"
+             >
+                {activeServiceIndex === 0 && <TrafficDashboard />}
+                {activeServiceIndex === 1 && <DesignInterface />}
+                {activeServiceIndex === 2 && <VideoTimeline />}
+                {activeServiceIndex === 3 && <SystemStack />}
+             </motion.div>
+           </AnimatePresence>
         </div>
       </div>
 
-      {/* RIGHT PANEL */}
-      <div className="w-full md:w-1/2 min-h-screen p-6 md:p-16 flex flex-col justify-center gap-16 md:gap-20 bg-white pb-24">
-        {services.map((s, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ margin: "-30% 0px -30% 0px" }}
-            onViewportEnter={() => setActiveServiceIndex(i)}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col gap-2 border-l-4 border-black pl-6 md:pl-8"
-          >
-            <span 
-              className="font-mono text-[10px] font-bold w-fit px-2 py-1 text-black"
-              style={{ backgroundColor: '#f3f4f6' }} // Light grey bg
+      {/* RIGHT PANEL - CONTENT */}
+      <div className="w-full md:w-1/2 min-h-screen p-6 md:p-16 flex flex-col justify-center bg-white pb-24">
+        <div className="flex flex-col gap-16 md:gap-20">
+            {services.map((s, i) => (
+            <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ margin: "-30% 0px -30% 0px" }}
+                onViewportEnter={() => setActiveServiceIndex(i)}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col gap-2 border-l-4 border-black pl-6 md:pl-8 group cursor-default"
             >
-              <span className="text-gray-600">
-                 {s.tag}
-              </span>
-            </span>
-            <h3 className="text-3xl md:text-5xl font-sans font-bold leading-none uppercase text-black">{s.title}</h3>
-            <p className="font-mono text-gray-500 max-w-sm text-xs md:text-sm leading-relaxed">{s.desc}</p>
-          </motion.div>
-        ))}
+                <span 
+                className="font-mono text-[10px] font-bold w-fit px-2 py-1 text-black transition-colors duration-300"
+                style={{ backgroundColor: activeServiceIndex === i ? '#39FF14' : '#f3f4f6' }}
+                >
+                <span className={activeServiceIndex === i ? 'text-black' : 'text-gray-600'}>
+                    {s.tag}
+                </span>
+                </span>
+                <h3 className={`text-3xl md:text-5xl font-sans font-bold leading-none uppercase transition-colors duration-300 ${activeServiceIndex === i ? 'text-black' : 'text-gray-300'}`}>
+                    {s.title}
+                </h3>
+                <p className="font-mono text-gray-500 max-w-sm text-xs md:text-sm leading-relaxed">
+                    {s.desc}
+                </p>
+            </motion.div>
+            ))}
+        </div>
+
+        {/* CTA Button */}
+        <div className="mt-16 pl-8">
+            <button className="group relative px-6 py-3 border border-gray-300 bg-transparent overflow-hidden rounded-sm transition-all hover:border-black">
+                <span className="absolute inset-0 w-full h-full bg-black transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
+                <span className="relative flex items-center gap-3 text-xs md:text-sm font-bold font-mono tracking-widest text-black group-hover:text-white transition-colors duration-300">
+                    VER TODOS OS DETALHES <ArrowRight size={14} />
+                </span>
+            </button>
+        </div>
+
       </div>
     </section>
   );
